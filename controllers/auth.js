@@ -112,7 +112,6 @@ module.exports.handleGetCompany = async (req, res,ticker) => {
   Stock.findOne({ symbol:ticker }).then((stock) => {
     // Check for user
     if (!stock) {
-    //   errors.email = 'User not found';
       return res.status(404).json('Stock not found');
     }
 	// Check Password
@@ -120,11 +119,6 @@ module.exports.handleGetCompany = async (req, res,ticker) => {
   });
 }
 module.exports.handleGetStockInfo = async (req,res,ticker,time) => {
-	// const { token } = req.body;
-	// if ( !token ) {
-	// 	return res.status(400).json('Invalid Token');
-	// }
-  // Find user by email
   let startDate;
   let endDate;
   switch(time) {
@@ -152,8 +146,6 @@ module.exports.handleGetStockInfo = async (req,res,ticker,time) => {
     const data = await fetch_response.json();
     return res.json(data);
 	}
-	// console.log(stocks)
-	// Check Password
     res.json(stocks);
 }
 
