@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use('/api', apiRouter);
 
 // Path used by client /*
-app.use(express.static(path.join(__dirname, "client/build")));
+app.use(express.static(path.join(__dirname, "client2/build")));
 
 const port = Number(process.env.PORT) || 8000;
 app.listen(port, () => console.log(`Server listening on port: ${port}`));
