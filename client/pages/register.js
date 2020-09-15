@@ -1,7 +1,7 @@
-/* /pages/login.js */
+/* /pages/register.js */
 
-import React, { useState, useEffect, useContext } from "react";
-import { useRouter } from "next/router";
+import React, { useState, useContext } from "react";
+
 import {
   Container,
   Row,
@@ -12,26 +12,14 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import { login } from "../lib/auth";
+import { registerUser } from "../lib/auth";
 import AppContext from "../context/AppContext";
 
-function Login(props) {
-  const [data, updateData] = useState({ identifier: "", password: "" });
+const Register = () => {
+  const [data, setData] = useState({ email: "", username: "", password: "" });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const router = useRouter();
+  const [error, setError] = useState({});
   const appContext = useContext(AppContext);
-  
-  useEffect(() => {
-    if (appContext.isAuthenticated) {
-      router.push("/"); // redirect if you're already logged in
-    }
-  }, []);
-
-  function onChange(event) {
-    updateData({ ...data, [event.target.name]: event.target.value });
-  }
-
   return (
     <Container>
       <Row>
@@ -55,39 +43,59 @@ function Login(props) {
               <Form>
                 <fieldset disabled={loading}>
                   <FormGroup>
+                    <Label>Username:</Label>
+                    <Input
+                      disabled={loading}
+                      onChange={(e) =>
+                        setData({ ...data, username: e.target.value })
+                      }
+                      value={data.username}
+                      type="text"
+                      name="username"
+                      style={{ height: 50, fontSize: "1.2em" }}
+                    />
+                  </FormGroup>
+                  <FormGroup>
                     <Label>Email:</Label>
                     <Input
-                      onChange={(event) => onChange(event)}
-                      name="identifier"
+                      onChange={(e) =>
+                        setData({ ...data, email: e.target.value })
+                      }
+                      value={data.email}
+                      type="email"
+                      name="email"
                       style={{ height: 50, fontSize: "1.2em" }}
                     />
                   </FormGroup>
                   <FormGroup style={{ marginBottom: 30 }}>
                     <Label>Password:</Label>
                     <Input
-                      onChange={(event) => onChange(event)}
+                      onChange={(e) =>
+                        setData({ ...data, password: e.target.value })
+                      }
+                      value={data.password}
                       type="password"
                       name="password"
                       style={{ height: 50, fontSize: "1.2em" }}
                     />
                   </FormGroup>
-
                   <FormGroup>
                     <span>
-                      <a href="">
-                        <small>Forgot Password?</small>
+                      <a href="/login">
+                        <small>Login</small>
                       </a>
                     </span>
                     <Button
                       style={{ float: "right", width: 120 }}
                       color="primary"
+                      disabled={loading}
                       onClick={() => {
                         setLoading(true);
-                        login(data.identifier, data.password)
+                        registerUser(data.username, data.email, data.password)
                           .then((res) => {
-                            setLoading(false);
-                            // set authed User in global context to update header/app state
+                            // set authed user in global context object
                             appContext.setUser(res.data.user);
+                            setLoading(false);
                           })
                           .catch((error) => {
                             setError(error.response.data);
@@ -95,7 +103,7 @@ function Login(props) {
                           });
                       }}
                     >
-                      {loading ? "Loading... " : "Submit"}
+                      {loading ? "Loading.." : "Submit"}
                     </Button>
                   </FormGroup>
                 </fieldset>
@@ -137,6 +145,5 @@ function Login(props) {
       </style>
     </Container>
   );
-}
-
-export default Login;
+};
+export default Register;

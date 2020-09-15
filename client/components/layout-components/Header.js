@@ -59,10 +59,6 @@ const MyMenu = () => {
         }
       }}
     >
-      <Menu.Item key="profile">
-        {/* <Icon type="user" /> */}
-        Profile
-      </Menu.Item>
       <Menu.Divider style={{ marginTop: -5, marginBottom: 0 }} />
       <Menu.Item key="logout">
         {/* <Icon type="logout" /> */}
@@ -73,7 +69,7 @@ const MyMenu = () => {
 }
 
 export default function header ({ collapsed, handleToggle }) {
-  const { user, setUser } = useContext(AppContext);
+  const { user } = useContext(AppContext);
   // const { isAuthenticated } = useAuth0()
 
   return (

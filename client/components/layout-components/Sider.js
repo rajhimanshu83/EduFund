@@ -21,7 +21,7 @@ const FixedSider = styled(Sider)`
   }
 `
 
-export default ({ collapsed, setCollapsed, children }) => {
+export default function sidebar ({ collapsed, setCollapsed, children }) {
   let firstMounted = useRef(false)
 
   useEffect(() => {

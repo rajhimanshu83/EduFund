@@ -86,7 +86,8 @@ export const logout = () => {
   // sync logout between multiple windows
   window.localStorage.setItem("logout", Date.now());
   //redirect to the home page
-  Router.push("/");
+  window.location.href = '/login'
+  // Router.push("/login");
 };
 
 //Higher Order Component to wrap our pages and logout simultaneously logged in tabs

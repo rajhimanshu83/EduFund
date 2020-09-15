@@ -31,6 +31,7 @@ export default function mennu ({ style, closeDrawer }) {
   const router = useRouter()
   // const currentPath = router.route
   // let selectedKeys = []
+  const { isAuthenticated } = useContext(AppContext);
   const { symbol, setSymbol } = useContext(AppContext);
 
   // for (let i = keys.length - 1; i >= 0; i--) {
@@ -53,7 +54,7 @@ export default function mennu ({ style, closeDrawer }) {
         setSymbol(key)
       }}
     >
-  {stockCompanies.map(company => <Menu.Item key={company.symbol}  >
+  {isAuthenticated && stockCompanies.map(company => <Menu.Item key={company.symbol}  >
     <div>
     {/* <DashboardOutlined /> */}
     <span>{company.symbol}</span>

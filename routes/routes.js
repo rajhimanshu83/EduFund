@@ -1,10 +1,10 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const fetch = require("node-fetch");
-require("dotenv").config();
+// require("dotenv").config();
 
-const api_key = process.env.API_KEY;
-const sb_api_key = process.env.SB_API_KEY;
+const api_key = "Tpk_c548b69f38f242c2ba5d20305003a574";
+const sb_api_key = "Tpk_c548b69f38f242c2ba5d20305003a574";
 const { handleSignin, handleRegister, handleGetuser,handleGetCompany,handleGetStockInfo } = require('../controllers/auth');
 
 const router = express.Router();

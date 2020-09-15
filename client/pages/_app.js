@@ -3,10 +3,8 @@ import React from "react";
 import App from "next/app";
 import Head from "next/head";
 import Cookie from "js-cookie";
-import fetch from "isomorphic-fetch";
-import Layout from "../components/Layout2";
+import Layout from "../components/Layout";
 import AppContext from "../context/AppContext";
-import withData from "../lib/apollo";
 import { userdetails } from "../lib/auth";
 
 import "../styles/antd.less";
@@ -69,4 +67,4 @@ class MyApp extends App {
   }
 }
 
-export default withData(MyApp);
+export default MyApp;
