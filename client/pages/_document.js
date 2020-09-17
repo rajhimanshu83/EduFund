@@ -1,7 +1,3 @@
-/**
- * Description: HTML Document (stylesheet) settings
- * Author: Hieu Chu
- */
 
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
@@ -36,7 +32,6 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          {/* Import CSS for nprogress */}
           <link rel="shortcut icon" href="/static/favicon.ico" />
           <link
             rel="icon"

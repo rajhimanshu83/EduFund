@@ -1,8 +1,3 @@
-/**
- * Description: Header bar of page
- * Author: Hieu Chu
- */
-
 import { Layout, Dropdown, Menu } from 'antd'
 const { Header } = Layout
 import React, { useContext } from "react";
@@ -13,7 +8,7 @@ import { Logo } from './LogoTitle'
 import Link from 'next/link'
 // import { useAuth0 } from '../auth0-components'
 import nookies from 'nookies'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import AppContext from "../../context/AppContext";
 import { logout } from "../../lib/auth";
 
@@ -46,7 +41,6 @@ const HeaderBlock = styled(TriggerBlock)`
 `
 
 const MyMenu = () => {
-  // const { logout, user } = useAuth0()
   return (
     <Menu
       onClick={item => {
@@ -71,7 +65,7 @@ const MyMenu = () => {
 export default function header ({ collapsed, handleToggle }) {
   const { user } = useContext(AppContext);
   // const { isAuthenticated } = useAuth0()
-
+  const router = useRouter()
   return (
     <Header
       style={{
@@ -128,13 +122,8 @@ export default function header ({ collapsed, handleToggle }) {
           }}
         >
             <HeaderBlock>
-              {/* <Icon
-                type="user"
-                style={{ fontSize: 16, marginRight: 8 }}
-                title="User"
-              /> */}
-              <Link href="/login"><span>Login</span></Link>
-              <Link href="/register"><span style={{marginLeft:"10px"}}>Register</span></Link>
+              {router.pathname !=="/login" && <Link href="/login"><span>Login</span></Link>}
+              {router.pathname !=="/register" && <Link href="/register"><span style={{marginLeft:"10px"}}>Register</span></Link>}
             </HeaderBlock>
         </div>
       )}

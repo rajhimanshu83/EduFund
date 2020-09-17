@@ -1,8 +1,3 @@
-/**
- * Description: Main layout component of the app
- * Author: Hieu Chu
- */
-
 import React from 'react'
 import { Layout } from 'antd'
 const { Content } = Layout

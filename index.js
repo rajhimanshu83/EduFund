@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const apiRouter = require("./routes/routes");
-// const logger = require("./middleware/logger");
 
 const mongoose = require('mongoose');
 require("dotenv").config();
@@ -14,9 +13,6 @@ mongoose
   .then(() => console.log('MongoDB Connected'))
   .catch((err) => console.log(err));
 const app = express();
-
-// Init middleware
-// app.use(logger);
 
 app.use(cors())
 // body-parser (express middleware) that reads a form's input and stores it as a javascript object accessible through req.body

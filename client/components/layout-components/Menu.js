@@ -1,8 +1,3 @@
-/**
- * Description: Drawer's menu list
- * Author: Hieu Chu
- */
-
 import { Menu} from 'antd'
 import { useRouter } from 'next/router'
 import AppContext from "../../context/AppContext";
@@ -10,7 +5,6 @@ import { DashboardOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { useContext } from "react";
 // import e from 'express';
 
-const keys = ['/', '/sculptures', '/makers', '/users', '/recent-activity']
 const stockCompanies = [
   {companyname:"Agilent Technologies, Inc",symbol:"A"},
   {companyname:"ATA Creativity Global",symbol:"AACG"},
@@ -56,9 +50,7 @@ export default function mennu ({ style, closeDrawer }) {
     >
   {isAuthenticated && stockCompanies.map(company => <Menu.Item key={company.symbol}  >
     <div>
-    {/* <DashboardOutlined /> */}
     <span>{company.symbol}</span>
-      {/* <span>{company.companyname}</span> */}
     </div>
 </Menu.Item>)}
     </Menu>

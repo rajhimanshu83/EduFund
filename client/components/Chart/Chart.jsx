@@ -35,9 +35,11 @@ const Chart = ({ ticker }) => {
       calculatedreturn = ((data.close/nextDate.close)-1)*100;
       return Number(calculatedreturn.toFixed(4));
     })
-    const filteredData = ret.filter(item => item)
-    deviation = d3.deviation(filteredData, r => r).toFixed(4);
-    averageReturn = d3.mean(filteredData).toFixed(4);
+    const filteredData = ret.filter(item => item);
+    if(filteredData.length > 0){
+      deviation = d3.deviation(filteredData, r => r).toFixed(4);
+      averageReturn = d3.mean(filteredData).toFixed(4);
+    }
     // setDeviation(`${devia}`);
   }
 

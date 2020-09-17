@@ -18,7 +18,7 @@ import AppContext from "../context/AppContext";
 function Login(props) {
   const [data, updateData] = useState({ identifier: "", password: "" });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState({});
   const router = useRouter();
   const appContext = useContext(AppContext);
   
@@ -26,28 +26,32 @@ function Login(props) {
     if (appContext.isAuthenticated) {
       router.push("/"); // redirect if you're already logged in
     }
-  }, []);
-
+  }, [appContext.isAuthenticated]);
   function onChange(event) {
     updateData({ ...data, [event.target.name]: event.target.value });
   }
 
   return (
-    <Container>
+    <Container >
       <Row>
         <Col sm="12" md={{ size: 5, offset: 3 }}>
           <div className="paper">
+            <div className="title" style={{display:"flex"}}>
+              <h2 style={{margin:"auto"}}>
+                Sign in
+              </h2>
+            </div>
             <section className="wrapper">
               {Object.entries(error).length !== 0 &&
                 error.constructor === Object &&
-                error.message.map((error) => {
+                error.messages.map((m) => {
                   return (
                     <div
-                      key={error.messages[0].id}
+                      key={m}
                       style={{ marginBottom: 10 }}
                     >
                       <small style={{ color: "red" }}>
-                        {error.messages[0].message}
+                        {m}
                       </small>
                     </div>
                   );
@@ -58,6 +62,7 @@ function Login(props) {
                     <Label>Email:</Label>
                     <Input
                       onChange={(event) => onChange(event)}
+                      type="email"
                       name="identifier"
                       style={{ height: 50, fontSize: "1.2em" }}
                     />
@@ -81,6 +86,7 @@ function Login(props) {
                     <Button
                       style={{ float: "right", width: 120 }}
                       color="primary"
+                      disabled={!data.identifier && !data.password}
                       onClick={() => {
                         setLoading(true);
                         login(data.identifier, data.password)

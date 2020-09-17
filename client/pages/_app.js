@@ -5,7 +5,8 @@ import Head from "next/head";
 import Cookie from "js-cookie";
 import Layout from "../components/Layout";
 import AppContext from "../context/AppContext";
-import { userdetails } from "../lib/auth";
+import { userdetails,logout } from "../lib/auth";
+import { ToastProvider } from 'react-toast-notifications'
 
 import "../styles/antd.less";
 import '../static/index.css';
@@ -25,7 +26,7 @@ class MyApp extends App {
       this.setUser(res.data.user);
       })
       .catch((error) => {
-      console.log(error)
+        logout();
       });
     }
   }
@@ -50,6 +51,7 @@ class MyApp extends App {
           symbol:this.state.symbol
         }}
       >
+  <ToastProvider>
         <Head>
           <link
             rel="stylesheet"
@@ -62,6 +64,7 @@ class MyApp extends App {
         <Layout>
           <Component {...pageProps} />
         </Layout>
+        </ToastProvider>
       </AppContext.Provider>
     );
   }

@@ -10,16 +10,32 @@ const fetch = require("node-fetch");
 
 require("dotenv").config();
 
-const api_key = process.env.API_KEY;
-const sb_api_key = process.env.SB_API_KEY;
+const api_key = "Tpk_c548b69f38f242c2ba5d20305003a574";
+const sb_api_key = "Tpk_c548b69f38f242c2ba5d20305003a574";
 // User Register
 module.exports.handleRegister = (req, res) => {
 	const { email, username, password } = req.body;
-    console.log( email, username, password);
+	if(!email && !username && !password){
+		return res.status(400).json({
+			status: 400,
+			messages: ["All fields are required."],
+		   });
+	}
+
+	if (!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)))
+	{
+	  return res.status(400).json({
+		  status: 400,
+		  messages: ["Enter Valid Email Address"],
+		 });
+	}
 	User.findOne({ email: req.body.email }).then((user) => {
 		if (user) {
 		//   errors.email = 'Email already exists';
-		  return res.status(400).json('Email already exists');
+		return res.status(400).json({
+			status: 400,
+			messages: ["Enter Already Taken"],
+		   });
 		} else {
 		  const newUser = new User({
 			username: req.body.username,
@@ -43,16 +59,29 @@ module.exports.handleRegister = (req, res) => {
 // User Signin
 module.exports.handleSignin = async (req, res, bcrypt) => {
 	const { email, password } = req.body;
-    console.log(email, password)
 	if ( !email || !password ) {
-		return res.status(400).json('incorrect form submission');
+		return res.status(400).json({
+			status: 400,
+			messages: ["Email & Password is required"],
+		   });
 	}
+
+ if (!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)))
+  {
+    return res.status(400).json({
+		status: 400,
+		messages: ["Invalid Email Address"],
+	   });
+  }
   // Find user by email
   User.findOne({ email }).then((user) => {
     // Check for user
     if (!user) {
     //   errors.email = 'User not found';
-      return res.status(404).json('User not found');
+	return res.status(404).json({
+		status: 404,
+		messages: ["User not found! Kindly Register"],
+	   });
     }
     // Check Password
     bcrypt.compare(password, user.password).then((isMatch) => {
@@ -75,7 +104,10 @@ module.exports.handleSignin = async (req, res, bcrypt) => {
         );
       } else {
         // errors.password = 'Password incorrect';
-        return res.status(400).json('Password incorrect');
+        return res.status(400).json({
+			status: 400,
+			messages: ["Incorrect Password"],
+		   });
       }
     });
   });
@@ -84,11 +116,16 @@ module.exports.handleSignin = async (req, res, bcrypt) => {
 // User Getuser
 module.exports.handleGetuser = async (req, res) => {
 	const { token } = req.body;
-	if ( !token ) {
-		return res.status(400).json('Invalid Token');
+    if(!token) {
+	res.sendStatus(401);
+    }
+    jwt.verify(token, keys.secretOrKey, (err, user) => {
+	if (err) {
+		return res.sendStatus(403);
 	}
-  // Find user by email
-  User.findOne({ token }).then((user) => {
+    });
+    // Find user by email
+    User.findOne({ token }).then((user) => {
     // Check for user
     if (!user) {
     //   errors.email = 'User not found';
@@ -104,23 +141,26 @@ module.exports.handleGetuser = async (req, res) => {
 }
 
 module.exports.handleGetCompany = async (req, res,ticker) => {
-	// const { token } = req.body;
-	// if ( !token ) {
-	// 	return res.status(400).json('Invalid Token');
-	// }
-  // Find user by email
   Stock.findOne({ symbol:ticker }).then((stock) => {
-    // Check for user
     if (!stock) {
       return res.status(404).json('Stock not found');
     }
-	// Check Password
     res.json(stock);
   });
 }
 module.exports.handleGetStockInfo = async (req,res,ticker,time) => {
+  const authHeader = req.headers.authorization;
+  if(!authHeader) {
+	res.sendStatus(401);
+  }
+  const token = authHeader.split(' ')[1];
+
+  jwt.verify(token, keys.secretOrKey, (err, user) => {
+	if (err) {
+		return res.sendStatus(403);
+	}
+  });
   let startDate;
-  let endDate;
   switch(time) {
 	case "1D":
 	startDate = moment().subtract(1, 'days').format("YYYY-MM-DD");
@@ -136,7 +176,6 @@ module.exports.handleGetStockInfo = async (req,res,ticker,time) => {
 	break;
 	default:
 	console.log("invalidDate")
-	  // code block
   }
   const stocks = await StockHistory.find({ symbol:ticker, date:{$gte:startDate} });
   if (stocks.length == 0) {

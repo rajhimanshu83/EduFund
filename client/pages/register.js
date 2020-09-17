@@ -1,6 +1,8 @@
 /* /pages/register.js */
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext,useEffect } from "react";
+import { useRouter } from "next/router";
+import { useToasts } from 'react-toast-notifications'
 
 import {
   Container,
@@ -20,22 +22,35 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
   const appContext = useContext(AppContext);
+  const router = useRouter();
+  const { addToast } = useToasts()
+
+  useEffect(() => {
+    if (appContext.isAuthenticated) {
+      router.push("/"); // redirect if you're already logged in
+    }
+  }, [appContext.isAuthenticated]);
   return (
     <Container>
       <Row>
         <Col sm="12" md={{ size: 5, offset: 3 }}>
           <div className="paper">
+          <div className="title" style={{display:"flex"}}>
+              <h2 style={{margin:"auto"}}>
+                Sign Up
+              </h2>
+            </div>
             <section className="wrapper">
               {Object.entries(error).length !== 0 &&
                 error.constructor === Object &&
-                error.message.map((error) => {
+                error.messages.map((m) => {
                   return (
                     <div
-                      key={error.messages[0].id}
+                      key={m}
                       style={{ marginBottom: 10 }}
                     >
                       <small style={{ color: "red" }}>
-                        {error.messages[0].message}
+                        {m}
                       </small>
                     </div>
                   );
@@ -95,6 +110,7 @@ const Register = () => {
                           .then((res) => {
                             // set authed user in global context object
                             appContext.setUser(res.data.user);
+                            addToast('User Created Successfully', { appearance: 'success',autoDismiss: true });
                             setLoading(false);
                           })
                           .catch((error) => {

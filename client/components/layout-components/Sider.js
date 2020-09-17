@@ -1,8 +1,3 @@
-/**
- * Description: Responsive sider for mobile's layout
- * Author: Hieu Chu
- */
-
 import { useEffect, useRef } from 'react'
 import { Layout } from 'antd'
 import styled from 'styled-components'
